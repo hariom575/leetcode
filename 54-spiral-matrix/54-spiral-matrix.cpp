@@ -1,43 +1,32 @@
 class Solution {
 public:
-    vector<int> spiralOrder(vector<vector<int>>& nums) {
-int row_start = 0;
-int row_end = nums.size()-1;
-int col_start = 0;
-int col_end = nums[0].size()-1;
-int n = nums.size() * nums[0].size();
-vector<int> ans;
-
-    while(row_start <= row_end && col_start<=col_end){
-        //for row start
-        for(int col = col_start ; col<= col_end; col++){
-            ans.push_back(nums[row_start][col]);
-        }   
-        
-        row_start++;
-        
-        //for coloumn end
-        for(int row = row_start; row<= row_end; row++){
-            ans.push_back(nums[row][col_end]);
+    vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        int n=matrix.size();
+        int m=matrix[0].size();
+        int left=0;
+        int right=m-1;
+        int bottom=n-1;
+        int top=0;
+        vector<int>ans;
+        while(top<=bottom and left<=right){
+            for(int i=left;i<=right;i++){
+                ans.push_back(matrix[top][i]);
+            }
+            top++;
+             for(int i=top;i<=bottom;i++){
+                ans.push_back(matrix[i][right]);
+            }
+            right--;
+            for(int i=right;i>=left;i--){
+                ans.push_back(matrix[bottom][i]);
+            }
+            bottom--;
+            for(int i=bottom;i>=top;i--){
+                ans.push_back(matrix[i][left]);
+            }
+            left++;
         }
-        col_end--;
-        
-        //for row end
-        for(int col = col_end; col>=col_start; col--){
-            ans.push_back(nums[row_end][col]);
-        }
-        row_end--;
-        
-        //for column start
-        for(int row = row_end; row>=row_start; row--){
-            ans.push_back(nums[row][col_start]);
-        }
-        col_start++;
+        while(ans.size()>n*m) ans.pop_back();
+        return ans;
     }
-    vector<int> spiral(n, 0);
-    for(int i = 0; i<n; i++){
-        spiral[i] = ans[i];
-    }
-    return spiral;
-}
 };
