@@ -8,31 +8,22 @@
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution {
-public:
-    ListNode* reverseBetween(ListNode* head, int left, int right) {
-        int cnt=1;
-        ListNode * temp=head;
-        ListNode * prev=NULL;
-        while(cnt<left){
-            prev=temp;
-            temp=temp->next;
-            cnt++;
+class Solution
+{
+    public:
+        ListNode* reverseBetween(ListNode *head, int left, int right){
+            ListNode *dummy = new ListNode(0), *pre = dummy, *cur;
+            dummy->next = head;
+            for (int i = 0; i < left - 1; i++){
+                pre = pre->next;
+            }
+            cur = pre->next;
+            for (int i = 0; i < right - left; i++){
+                ListNode *temp = pre->next;
+                pre->next = cur->next;
+                cur->next = cur->next->next;
+                pre->next->next = temp;
+            }
+            return dummy->next;
         }
-      ///  cout<<temp->val<<" "<<prev->val<<" ";
-        ListNode* temp1=temp;
-        ListNode* prev1=NULL;
-        ListNode* next=NULL;
-        while(cnt<=right){
-            next=temp->next;
-            temp->next=prev1;
-            prev1=temp;
-            temp=next;
-            cnt++;
-        }
-       if(temp1) temp1->next=temp;
-        if(!prev) return prev1;
-       if(prev) prev->next=prev1;
-       return head;
-    }
 };
