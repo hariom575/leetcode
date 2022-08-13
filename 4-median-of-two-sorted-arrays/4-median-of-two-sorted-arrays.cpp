@@ -1,53 +1,36 @@
 class Solution {
 public:
-    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        int n1=nums1.size();
-        int n2=nums2.size();
-        int n=n1+n2;
-        int m1=n/2;
-        int m2=n/2-1;
-        int num1=0,num2=0;
-        int i=0,j=0;
-        while(i<n1 and j<n2){
-            if(m1==0){
-                num1=min(nums1[i],nums2[j]);
+ double findMedianSortedArrays(vector<int>& s1, vector<int>& s2) {
+        int n1 = s1.size(), n2=s2.size();
+        if(n1>n2)
+            return findMedianSortedArrays(s2, s1);
+        
+        if(n1==0)
+            return double((s2[(n2-1)/2]+s2[n2/2]))/2;
+            
+        int tot_l = (n1+n2+1)/2;
+        int L=0, R=n1; // for cut1 boundary in s1
+        int cut1, cut2;
+        double L1,L2,R1,R2;
+        
+        while(R>=L){
+            cut1 = (R+L)/2;
+            cut2 = tot_l - cut1;
+            L1 = (cut1==0) ? -INFINITY:double(s1[cut1-1]); //4 boundary cases
+            L2 = (cut2==0) ?  -INFINITY:double(s2[cut2-1]);
+            R1 = (cut1==n1) ? INFINITY:double(s1[cut1]);
+            R2 = (cut2==n2) ? INFINITY:double(s2[cut2]);
+            
+            if( L1 > R2) // move R to left 
+                R = cut1;  
+            else if(L2 > R1) // move L to right
+                L = cut1+1;
+            else{
+                if((n1+n2)%2) // odd
+                    return max(L1,L2);
+                return (max(L1,L2)+min(R1, R2))/2;
             }
-             if(m2==0){
-                num2=min(nums1[i],nums2[j]);
-            }
-            if(nums1[i]<nums2[j]){
-                i++;
-            }else j++;
-            m1--;
-            m2--;
         }
-        while(i<n1){
-            if(m1==0){
-                num1=nums1[i];
-            }
-            if(m2==0){
-                num2=nums1[i];
-            }
-            i++;
-            m1--;
-            m2--;
-        }
-         while(j<n2){
-            if(m1==0){
-                num1=nums2[j];
-            }
-            if(m2==0){
-                num2=nums2[j];
-            }
-            j++;
-            m1--;
-            m2--;
-        }
-         if(n%2==0){
-        double re = num1 + num2;
-        return re/2;
-    }
-    double re = num1;
-    return re; 
+        return -1;
     }
 };
