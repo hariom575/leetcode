@@ -2,20 +2,15 @@ class Solution {
 public:
     int jump(vector<int>& nums) {
         int n=nums.size();
-        int jump=0;
-        int maxreach=0;
-        int reach=0;
-        if(n==1)
-            return 0;
-        for(int i=0;i<n-1;i++){
-     if(i+nums[i]>maxreach)
-maxreach=i+nums[i];
-            if(i==reach){
-                reach=maxreach;
-                jump++;
-}
+        vector<int>dp(nums.size(),INT_MAX-1);
+        dp[0]=0;
+        for(int i=0;i<n;i++){
+            for(int j=1;j<=nums[i];j++){
+                int next=i+j;
+                if(next>=n) continue;
+                dp[next]=min(dp[next],dp[i]+1);
+            }
         }
-        return jump;
-
+        return dp[n-1];
     }
 };
